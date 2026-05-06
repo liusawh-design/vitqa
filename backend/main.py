@@ -852,6 +852,9 @@ async def serve_robots():
 async def serve_blog(path: str):
     if not path or path.endswith("/"):
         path = "index.html"
+    # Add .html if no extension
+    if "." not in path:
+        path = path + ".html"
     file_path = FRONTEND_DIR / "blog" / path
     if file_path.exists() and file_path.is_file():
         return FileResponse(file_path, headers={"Cache-Control": "max-age=3600"})
