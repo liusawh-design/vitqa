@@ -10,14 +10,68 @@ let isMember = false;
 let walletAddress = null;
 
 // ─── Init ────────────────────────────────────────────────────────
+let freeTrialRemaining = 0;
+let isFreeTrial = false;
+
 function init() {
     if (token) {
         loadProfile();
     }
+    checkFreeTrial();
     updateUI();
     setupFileUpload();
     setupModeCards();
 }
+
+function checkFreeTrial() {
+    fetch(API_BASE + '/free-trial')
+        .then(r => r.json())
+        .then(data => {
+            freeTrialRemaining = data.remaining;
+            updateFreeTrialUI();
+        })
+        .catch(() => {});
+}
+
+function updateFreeTrialUI() {
+    const guest = document.getElementById('converterGuest');
+    const panel = document.getElementById('converterPanel');
+    const trialBadge = document.getElementById('freeTrialBadge');
+    
+    if (isMember) {
+        if (guest) guest.classList.add('hidden');
+        if (panel) panel.classList.remove('hidden');
+        if (trialBadge) trialBadge.classList.add('hidden');
+        return;
+    }
+    
+    if (freeTrialRemaining > 0) {
+        isFreeTrial = true;
+        if (guest) guest.classList.add('hidden');
+        if (panel) panel.classList.remove('hidden');
+        if (trialBadge) {
+            trialBadge.classList.remove('hidden');
+            trialBadge.innerHTML = '🎁 <span data-i18n="freeTrial.badge">免费试用</span>: ' + 
+                freeTrialRemaining + '/' + data?.total + ' <span data-i18n="freeTrial.remaining">次剩余</span>';
+        }
+        // Update guest info text
+        const guestDesc = document.getElementById('guestDesc');
+        if (guestDesc) {
+            guestDesc.innerHTML = '🎁 <span data-i18n="freeTrial.desc">免费试用 ' + freeTrialRemaining + ' 次</span><br>' +
+                '<span data-i18n="freeTrial.cta">处理后需连接钱包下载，或购买永久会员</span>';
+        }
+    } else {
+        isFreeTrial = false;
+        if (!token) {
+            if (guest) guest.classList.remove('hidden');
+            if (panel) panel.classList.add('hidden');
+        }
+        if (trialBadge) trialBadge.classList.add('hidden');
+    }
+}
+
+// Override data from checkFreeTrial callback
+let trialTotal = 2;
 
 function updateUI() {
     const isLoggedIn = !!token && !!walletAddress;

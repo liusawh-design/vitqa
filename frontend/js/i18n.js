@@ -123,6 +123,12 @@ const LANGUAGES = {
             buy: '购买会员',
             features: '功能介绍',
         },
+        freeTrial: {
+                badge: "免费试用",
+                remaining: "次剩余",
+                desc: "免费试用2次",
+                cta: "处理后需连接钱包下载",
+            },
         toast: {
             addressCopied: '✅ 地址已复制',
             linkCopied: '✅ 链接已复制！',

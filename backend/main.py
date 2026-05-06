@@ -35,6 +35,7 @@ USDT_PRICE = 20  # USDT for permanent membership
 USDT_WALLET = os.environ.get("USDT_WALLET", "TBjQRf2DY1Vxi9yrvKYhifumcuz8rUrcwm")
 TRONGRID_API = "https://api.trongrid.io"
 MAX_CONVERSIONS_PER_DAY = 50  # per-user limit
+FREE_TRIAL_LIMIT = 2  # free conversions before wallet login
 RATE_LIMIT_PER_MINUTE = 20  # requests per minute per IP
 
 DB_PATH = Path(__file__).parent / "vitqa.db"
@@ -65,6 +66,7 @@ app.mount("/static", StaticFiles(directory=str(FRONTEND_DIR)), name="static")
 
 # ─── Rate Limiting (in-memory, simple IP-based) ──────────────
 rate_limit_store: dict[str, list[float]] = {}
+free_trial_store: dict[str, int] = {}  # IP -> free conversions used
 
 def check_rate_limit(request: Request):
     client_ip = request.client.host if request.client else "unknown"
@@ -537,11 +539,27 @@ def _mark_pending(conn, user, tx_hash: str, reason: str = "") -> dict:
 
 # ─── File Upload ──────────────────────────────────────────────
 
+@app.get("/api/free-trial")
+async def check_free_trial(request: Request):
+    """Check free trial remaining for this IP."""
+    ip = request.client.host if request.client else "unknown"
+    used = free_trial_store.get(ip, 0)
+    remaining = max(0, FREE_TRIAL_LIMIT - used)
+    return {"remaining": remaining, "total": FREE_TRIAL_LIMIT}
+
 @app.post("/api/upload")
 async def upload_audio(request: Request, token: str = Query(...), file: UploadFile = File(...)):
-    """Upload audio file for processing (members only)."""
+    """Upload audio file for processing (members only, free trial 2x)."""
     check_rate_limit(request)
-    user = check_member(token)
+    user = None
+    try:
+        user = check_member(token)
+    except HTTPException:
+        ip = request.client.host if request.client else "unknown"
+        used = free_trial_store.get(ip, 0)
+        if used >= FREE_TRIAL_LIMIT:
+            raise HTTPException(403, "Free trial exhausted. Connect wallet or purchase membership.")
+        # Continue as free trial
 
     if not file or not file.filename:
         raise HTTPException(400, "No file provided")
@@ -608,9 +626,17 @@ async def convert_audio(
     upload_id: str = Form(...),
     mode: str = Form("standard")
 ):
-    """Run the HPSS conversion pipeline (members only)."""
+    """Run the HPSS conversion pipeline (members or free trial)."""
     check_rate_limit(request)
-    user = check_member(token)
+    user = None
+    try:
+        user = check_member(token)
+    except HTTPException:
+        ip = request.client.host if request.client else "unknown"
+        used = free_trial_store.get(ip, 0)
+        if used >= FREE_TRIAL_LIMIT:
+            raise HTTPException(403, "Free trial exhausted. Connect wallet or purchase membership.")
+        free_trial_store[ip] = used + 1
 
     # Validate mode
     if mode not in ("standard", "gentle", "aggressive"):

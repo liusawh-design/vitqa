@@ -448,6 +448,38 @@
 
     <script src="/static/js/i18n.js"></script>
     <script src="/static/js/app.js"></script>
+    <script>
+    // Free trial: allow upload without token
+    function startFreeTrial() {
+        document.getElementById('converterGuest').classList.add('hidden');
+        document.getElementById('converterPanel').classList.remove('hidden');
+        document.getElementById('freeTrialBadge').classList.remove('hidden');
+        isFreeTrial = true;
+        freeTrialRemaining = 2;
+        document.getElementById('freeTrialBadge').innerHTML = '🎁 <span data-i18n="freeTrial.badge">免费试用</span>: 2/2 <span data-i18n="freeTrial.remaining">次剩余</span>';
+        toast('🎁 免费试用模式已启动，可直接上传文件');
+    }
+    
+    // Override free trial UI update after API fetch
+    const _origCheck = checkFreeTrial;
+    if (typeof _origCheck === 'function') {
+        checkFreeTrial = function() {
+            fetch('/api/free-trial').then(r=>r.json()).then(d=>{
+                freeTrialRemaining = d.remaining;
+                trialTotal = d.total;
+                const badge = document.getElementById('freeTrialBadge');
+                const trialGuest = document.getElementById('freeTrialGuest');
+                if (badge && freeTrialRemaining > 0) {
+                    badge.innerHTML = '🎁 Free Trial: ' + freeTrialRemaining + '/' + trialTotal + ' remaining';
+                    badge.classList.remove('hidden');
+                    if (trialGuest) trialGuest.style.display = 'block';
+                }
+                if (trialGuest) trialGuest.style.display = freeTrialRemaining > 0 ? 'block' : 'none';
+            }).catch(()=>{});
+        };
+        checkFreeTrial();
+    }
+    </script>
     
     <script>
     // Share functions
