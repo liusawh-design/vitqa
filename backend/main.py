@@ -848,6 +848,17 @@ async def serve_robots():
         return FileResponse(path, media_type="text/plain", headers={"Cache-Control": "max-age=86400"})
     return HTMLResponse("Not Found", status_code=404)
 
+@app.get("/tools/{path:path}")
+async def serve_tools(path: str):
+    if not path or path.endswith("/"):
+        path = "index.html"
+    if "." not in path:
+        path = path + ".html"
+    file_path = FRONTEND_DIR / "tools" / path
+    if file_path.exists() and file_path.is_file():
+        return FileResponse(file_path, headers={"Cache-Control": "max-age=3600"})
+    return HTMLResponse("Not Found", status_code=404)
+
 @app.get("/blog/{path:path}")
 async def serve_blog(path: str):
     if not path or path.endswith("/"):
