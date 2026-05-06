@@ -834,6 +834,29 @@ def demo_page():
 
 # ─── Frontend ─────────────────────────────────────────────────
 
+@app.get("/sitemap.xml")
+async def serve_sitemap():
+    path = FRONTEND_DIR / "sitemap.xml"
+    if path.exists():
+        return FileResponse(path, media_type="application/xml", headers={"Cache-Control": "max-age=3600"})
+    return HTMLResponse("Not Found", status_code=404)
+
+@app.get("/robots.txt")
+async def serve_robots():
+    path = FRONTEND_DIR / "robots.txt"
+    if path.exists():
+        return FileResponse(path, media_type="text/plain", headers={"Cache-Control": "max-age=86400"})
+    return HTMLResponse("Not Found", status_code=404)
+
+@app.get("/blog/{path:path}")
+async def serve_blog(path: str):
+    if not path or path.endswith("/"):
+        path = "index.html"
+    file_path = FRONTEND_DIR / "blog" / path
+    if file_path.exists() and file_path.is_file():
+        return FileResponse(file_path, headers={"Cache-Control": "max-age=3600"})
+    return HTMLResponse("Not Found", status_code=404)
+
 @app.get("/{full_path:path}")
 def serve_frontend(full_path: str):
     if full_path == "" or full_path is None:
