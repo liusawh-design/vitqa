@@ -87,6 +87,29 @@ def get_db():
     return conn
 
 
+def migrate_db(conn):
+    """Migrate existing database to new schema."""
+    # Check if total_conversions column exists
+    try:
+        conn.execute("SELECT total_conversions FROM users LIMIT 1")
+    except sqlite3.OperationalError:
+        conn.executescript("""
+            ALTER TABLE users ADD COLUMN conversions_today INTEGER DEFAULT 0;
+            ALTER TABLE users ADD COLUMN last_conversion_date TEXT;
+            ALTER TABLE users ADD COLUMN total_conversions INTEGER DEFAULT 0;
+            ALTER TABLE users ADD COLUMN is_admin INTEGER DEFAULT 0;
+        """)
+    try:
+        conn.execute("SELECT wallet_sender FROM payments LIMIT 1")
+    except sqlite3.OperationalError:
+        conn.execute("ALTER TABLE payments ADD COLUMN wallet_sender TEXT DEFAULT ''")
+    try:
+        conn.execute("SELECT mode FROM conversions LIMIT 1")
+    except sqlite3.OperationalError:
+        conn.execute("ALTER TABLE conversions ADD COLUMN mode TEXT DEFAULT 'standard'")
+    conn.commit()
+
+
 def init_db():
     conn = get_db()
     conn.executescript("""
@@ -819,6 +842,9 @@ def serve_frontend(full_path: str):
 @app.on_event("startup")
 def startup():
     init_db()
+    conn = get_db()
+    migrate_db(conn)
+    conn.close()
     UPLOAD_DIR.mkdir(exist_ok=True)
     OUTPUT_DIR.mkdir(exist_ok=True)
     print(f"vitqa started | USDT: {USDT_WALLET} | Price: {USDT_PRICE} USDT")
