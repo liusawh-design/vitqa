@@ -153,7 +153,7 @@ const LANGUAGES = {
             badge: '⚡ HPSS v2 Engine',
             title1: 'Make AI Music',
             title2: 'Sound Human Again',
-            desc: 'vitqa uses HPSS smart separation to encode the background layer of AI-generated music while preserving the raw vocal quality. Elegantly bypass platform AI detection.',
+            desc: 'vitqa uses HPSS smart separation to encode the background layer of AI-generated music.<br>Preserve raw vocal quality. Elegantly bypass AI detection.',
             ctaStart: '🚀 Start Processing',
             ctaWallet: 'Connect Wallet',
             statAI: 'Avg AI Probability',
@@ -284,7 +284,7 @@ const LANGUAGES = {
             badge: '⚡ HPSS v2 エンジン',
             title1: 'AI音楽を',
             title2: '人間らしく',
-            desc: 'vitqaはHPSSスマート分離技術を使用し、AI生成音楽の背景レイヤーをエンコード処理。ボーカルの質感を保ちながら、プラットフォームのAI検出を回避します。',
+            desc: 'vitqaはHPSSスマート分離技術でAI音楽の背景レイヤーをエンコード処理。<br>ボーカル品質を保ちながらAI検出を回避します。',
             ctaStart: '🚀 処理を開始',
             ctaWallet: 'ウォレット接続',
             statAI: '平均AI確率',
@@ -415,7 +415,7 @@ const LANGUAGES = {
             badge: '⚡ HPSS v2 엔진',
             title1: 'AI 음악을',
             title2: '사람처럼 만듭니다',
-            desc: 'vitqa는 HPSS 스마트 분리 기술로 AI 생성 음악의 배경 레이어를 인코딩 처리합니다. 보컬 품질을 유지하면서 AI 감지를 우아하게 우회합니다.',
+            desc: 'vitqa는 HPSS 스마트 분리 기술로 AI 음악 배경 레이어를 인코딩 처리합니다.<br>보컬 품질 유지하며 AI 감지 우회.',
             ctaStart: '🚀 처리 시작',
             ctaWallet: '지갑 연결',
             statAI: '평균 AI 확률',
@@ -576,14 +576,16 @@ function applyLang() {
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         const text = t(key);
-        if (text) el.innerHTML = text;
+        if (text && typeof text === 'string') {
+            el.innerHTML = text;
+        }
     });
 
     // Update language switcher
     const sw = document.getElementById('langSwitcher');
     if (sw) {
         sw.innerHTML = Object.entries(LANGUAGES).map(([code, l]) =>
-            `<div class="lang-option ${code === lang ? 'active' : ''}" data-lang="${code}">${l.flag} ${l.name}</div>`
+            `<div class="lang-option ${code === lang ? 'active' : ''}" data-lang="${code}" onclick="setLang('${code}')">${l.flag} ${l.name}</div>`
         ).join('');
     }
     const swBtn = document.getElementById('langBtn');
@@ -612,5 +614,21 @@ function setLang(code) {
     if (dd) dd.classList.add('hidden');
 }
 
-// Init on DOM ready
-document.addEventListener('DOMContentLoaded', applyLang);
+// Also update title and run immediately + on DOM ready
+applyLang();
+document.addEventListener('DOMContentLoaded', function() {
+    applyLang();
+    // Re-apply after a short delay for dynamic content
+    setTimeout(applyLang, 100);
+});
+
+// Close language dropdown when clicking outside
+document.addEventListener('click', function(e) {
+    const wrap = document.getElementById('langSwitcherWrap');
+    const dd = document.getElementById('langDropdown');
+    if (wrap && dd && !wrap.contains(e.target)) {
+        dd.classList.add('hidden');
+    }
+});
+
+console.log('vitqa i18n loaded - lang:', getSavedLang());
