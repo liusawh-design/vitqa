@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,18 +63,26 @@
                 <span class="logo-text">vitqa</span>
             </a>
             <div class="nav-links">
-                <a href="#features" class="nav-link">功能</a>
-                <a href="#pricing" class="nav-link">定价</a>
-                <a href="#about" class="nav-link">关于</a>
+                <a href="#features" class="nav-link" data-i18n="nav.features">功能</a>
+                <a href="#pricing" class="nav-link" data-i18n="nav.pricing">定价</a>
+                <a href="#about" class="nav-link" data-i18n="nav.about">关于</a>
+            </div>
+            <div class="lang-switcher" id="langSwitcherWrap">
+                <button class="lang-btn" id="langBtn" onclick="document.getElementById('langDropdown').classList.toggle('hidden')">
+                    🇨🇳 中文 <span class="lang-arrow">▾</span>
+                </button>
+                <div class="lang-dropdown hidden" id="langDropdown" onclick="event.stopPropagation()">
+                    <div id="langSwitcher"></div>
+                </div>
             </div>
             <div class="nav-actions">
                 <button class="btn btn-ghost btn-connect-wallet" id="connectWalletBtn" onclick="connectMetaMask()">
-                    <span class="wallet-dot"></span> 连接钱包登录
+                    <span class="wallet-dot"></span> <span data-i18n="nav.connectWallet">连接钱包登录</span>
                 </button>
                 <div id="userMenu" class="user-menu hidden">
-                    <div class="user-badge" id="memberBadge">★ 永久会员</div>
+                    <div class="user-badge" id="memberBadge"><span data-i18n="nav.permanentMember">★ 永久会员</span></div>
                     <span class="wallet-short" id="userWallet"></span>
-                    <button class="btn btn-sm" onclick="logout()">退出</button>
+                    <button class="btn btn-sm" onclick="logout()"><span data-i18n="nav.logout">退出</span></button>
                 </div>
             </div>
         </div>
@@ -83,21 +91,21 @@
     <!-- Hero -->
     <section class="hero" id="hero">
         <div class="hero-content">
-            <div class="hero-badge">⚡ HPSS v2 优化引擎</div>
+            <div class="hero-badge" data-i18n="hero.badge">⚡ HPSS v2 优化引擎</div>
             <h1 class="hero-title">
-                <span class="gradient-text">让AI音乐</span><br>
-                听起来像人做的
+                <span class="gradient-text" data-i18n="hero.title1">让AI音乐</span><br>
+                <span data-i18n="hero.title2">听起来像人做的</span>
             </h1>
-            <p class="hero-desc">
+            <p class="hero-desc" data-i18n="hero.desc">
                 vitqa 基于 HPSS 智能分离技术，对 AI 生成音乐的背景层进行编码处理，<br>
                 保留人声原始质感，优雅绕过音频平台的 AI 检测。
             </p>
             <div class="hero-actions">
                 <button class="btn btn-primary btn-lg" onclick="scrollToConverter()">
-                    🚀 开始处理
+                    🚀 <span data-i18n="hero.ctaStart">开始处理</span>
                 </button>
                 <button class="btn btn-ghost btn-lg" onclick="connectMetaMask()">
-                    钱包登录
+                    <span data-i18n="hero.ctaWallet">钱包登录</span>
                 </button>
             </div>
         </div>
@@ -145,8 +153,8 @@
 
     <!-- Features -->
     <section class="features" id="features">
-        <h2 class="section-title">为什么选择 vitqa</h2>
-        <p class="section-sub">基于真实对抗检测数据优化的三档处理方案</p>
+        <h2 class="section-title" data-i18n="features.title">为什么选择 vitqa</h2>
+        <p class="section-sub" data-i18n="features.sub">基于真实对抗检测数据优化的三档处理方案</p>
         <div class="feature-grid">
             <div class="feature-card glass">
                 <div class="feature-icon">🎯</div>
@@ -184,13 +192,13 @@
     <!-- Converter Section (Members Only) -->
     <section class="converter" id="converter">
         <div class="converter-inner">
-            <h2 class="section-title">音乐去AI处理</h2>
-            <p class="section-sub">拖拽上传或点击选择音频文件</p>
+            <h2 class="section-title" data-i18n="converter.title">音乐去AI处理</h2>
+            <p class="section-sub" data-i18n="converter.sub">拖拽上传或点击选择音频文件</p>
 
             <div id="converterGuest" class="converter-guest glass">
                 <div class="guest-icon">🔒</div>
-                <h3>仅限会员使用</h3>
-                <p>永久会员仅需 20 USDT，支持 TRC-20 加密钱包支付</p>
+                <h3 data-i18n="converter.guestTitle">仅限会员使用</h3>
+                <p data-i18n="converter.guestDesc">永久会员仅需 20 USDT，支持 TRC-20 加密钱包支付</p>
                 <button class="btn btn-primary" onclick="connectMetaMask()">
                     连接钱包登录
                 </button>
@@ -203,8 +211,8 @@
                 <!-- Upload Zone -->
                 <div class="upload-zone glass" id="uploadZone">
                     <div class="upload-icon">🎵</div>
-                    <p class="upload-text">拖拽音频文件到此处</p>
-                    <p class="upload-hint">支持 WAV / MP3 / FLAC / M4A / OGG / AAC，最大 100MB</p>
+                    <p class="upload-text" data-i18n="converter.uploadText">拖拽音频文件到此处</p>
+                    <p class="upload-hint" data-i18n="converter.uploadHint">支持 WAV / MP3 / FLAC / M4A / OGG / AAC，最大 100MB</p>
                     <input type="file" id="fileInput" accept=".wav,.mp3,.flac,.m4a,.ogg,.aac" hidden>
                     <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
                         选择文件
@@ -217,7 +225,7 @@
 
                 <!-- Mode Selection -->
                 <div class="mode-select">
-                    <h3>选择处理模式</h3>
+                    <h3 data-i18n="converter.modeTitle">选择处理模式</h3>
                     <div class="mode-grid">
                         <label class="mode-card glass selected" data-mode="standard">
                             <input type="radio" name="mode" value="standard" checked hidden>
@@ -287,10 +295,10 @@
 
     <!-- Pricing -->
     <section class="pricing" id="pricing">
-        <h2 class="section-title">简单透明的定价</h2>
-        <p class="section-sub">永久会员，一次付费，永久使用</p>
+        <h2 class="section-title" data-i18n="pricing.title">简单透明的定价</h2>
+        <p class="section-sub" data-i18n="pricing.sub">永久会员，一次付费，永久使用</p>
         <div class="pricing-card glass featured">
-            <div class="pricing-badge">🔥 最受欢迎</div>
+            <div class="pricing-badge" data-i18n="pricing.badge">🔥 最受欢迎</div>
             <div class="pricing-plan">Permanent</div>
             <div class="pricing-price">
                 <span class="price-amount">20</span>
@@ -313,9 +321,9 @@
 
     <!-- About -->
     <section class="about" id="about">
-        <h2 class="section-title">分享 vitqa</h2>
+        <h2 class="section-title" data-i18n="share.title">分享 vitqa</h2>
         <div class="about-content">
-            <p>如果你觉得 vitqa 好用，分享给更多需要的人：</p>
+            <p data-i18n="share.desc">如果你觉得 vitqa 好用，分享给更多需要的人：</p>
             <div class="share-buttons">
                 <button class="share-btn" onclick="shareTo('twitter')" title="分享到 Twitter/X">
                     <span>𝕏 Twitter</span>
@@ -332,7 +340,7 @@
             </div>
         </div>
 
-        <h2 class="section-title">关于 vitqa</h2>
+        <h2 class="section-title" data-i18n="about.title">关于 vitqa</h2>
         <div class="about-content glass">
             <p>
                 vitqa 是一套基于 HPSS 谐波-打击乐分离技术的 AI 音乐去检测引擎。 
@@ -361,12 +369,12 @@
         <div class="footer-inner">
             <div class="footer-brand">
                 <span class="footer-logo">♫ vitqa</span>
-                <p class="footer-desc">AI音乐去检测处理平台</p>
+                <p class="footer-desc" data-i18n="footer.desc">AI音乐去检测处理平台</p>
             </div>
             <div class="footer-links">
-                <a href="#" onclick="connectMetaMask()">会员登录</a>
-                <a href="#pricing">购买会员</a>
-                <a href="#features">功能介绍</a>
+                <a href="#" onclick="connectMetaMask()" data-i18n="footer.login">会员登录</a>
+                <a href="#pricing" data-i18n="converter.guestBuy" data-i18n="footer.buy">购买会员</a>
+                <a href="#features" data-i18n="footer.features">功能介绍</a>
             </div>
             <div class="footer-copy">© 2026 vitqa. All rights reserved.</div>
         </div>
@@ -437,6 +445,7 @@
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
+    <script src="/static/js/i18n.js"></script>
     <script src="/static/js/app.js"></script>
     
     <script>
