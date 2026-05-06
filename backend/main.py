@@ -584,20 +584,24 @@ async def upload_audio(request: Request, token: str = Query(None), file: UploadF
             if ext not in ['mp3', 'wav', 'flac', 'm4a', 'ogg', 'aac', 'mp4', 'wma']:
                 raise HTTPException(400, "Invalid file format (magic bytes mismatch)")
 
-    # Daily conversion limit
-    today = datetime.utcnow().strftime("%Y-%m-%d")
-    conn = get_db()
-    user_row = conn.execute(
-        "SELECT conversions_today, last_conversion_date FROM users WHERE id=?",
-        (user["user_id"],)
-    ).fetchone()
+    # Daily conversion limit (skip for free trial - they have IP-based limit)
+    if user:
+        today = datetime.utcnow().strftime("%Y-%m-%d")
+        conn = get_db()
+        user_row = conn.execute(
+            "SELECT conversions_today, last_conversion_date FROM users WHERE id=?",
+            (user["user_id"],)
+        ).fetchone()
 
-    if user_row:
-        if user_row["last_conversion_date"] == today and user_row["conversions_today"] >= MAX_CONVERSIONS_PER_DAY:
-            conn.close()
-            raise HTTPException(429, f"Daily limit ({MAX_CONVERSIONS_PER_DAY} conversions) reached")
+        if user_row:
+            if user_row["last_conversion_date"] == today and user_row["conversions_today"] >= MAX_CONVERSIONS_PER_DAY:
+                conn.close()
+                raise HTTPException(429, f"Daily limit ({MAX_CONVERSIONS_PER_DAY} conversions) reached")
 
-    conn.close()
+        conn.close()
+    else:
+        conn = get_db()
+        conn.close()
 
     # Save file with sanitized name
     ext = filename.rsplit(".", 1)[-1].lower()
@@ -666,20 +670,21 @@ async def convert_audio(
     if result["status"] == "error":
         raise HTTPException(500, result["error"])
 
-    # Update daily counters
-    today = datetime.utcnow().strftime("%Y-%m-%d")
-    conn = get_db()
-    conn.execute(
-        "INSERT INTO conversions (user_id, input_filename, output_filename, duration_seconds, file_size_mb, mode) VALUES (?, ?, ?, ?, ?, ?)",
-        (user["user_id"], os.path.basename(input_path),
-         result["output_filename"], result["duration_seconds"], result["size_mb"], mode)
-    )
-    conn.execute(
-        "UPDATE users SET total_conversions = total_conversions + 1, conversions_today = CASE WHEN last_conversion_date = ? THEN conversions_today + 1 ELSE 1 END, last_conversion_date = ? WHERE id = ?",
-        (today, today, user["user_id"])
-    )
-    conn.commit()
-    conn.close()
+    # Update daily counters (skip for free trial users)
+    if user:
+        today = datetime.utcnow().strftime("%Y-%m-%d")
+        conn = get_db()
+        conn.execute(
+            "INSERT INTO conversions (user_id, input_filename, output_filename, duration_seconds, file_size_mb, mode) VALUES (?, ?, ?, ?, ?, ?)",
+            (user["user_id"], os.path.basename(input_path),
+             result["output_filename"], result["duration_seconds"], result["size_mb"], mode)
+        )
+        conn.execute(
+            "UPDATE users SET total_conversions = total_conversions + 1, conversions_today = CASE WHEN last_conversion_date = ? THEN conversions_today + 1 ELSE 1 END, last_conversion_date = ? WHERE id = ?",
+            (today, today, user["user_id"])
+        )
+        conn.commit()
+        conn.close()
 
     # Cleanup upload
     try:
@@ -698,10 +703,12 @@ async def convert_audio(
 
 
 @app.get("/api/download/{filename}")
-def download_audio(request: Request, filename: str, token: str = Query(...)):
-    """Download processed audio."""
+def download_audio(request: Request, filename: str, token: str = Query(None)):
+    """Download processed audio (members or recent free trial)."""
     check_rate_limit(request)
-    user = check_member(token)
+    if token:
+        user = check_member(token)
+    # If no token, still allow download of recent files (auto-cleanup handles old files)
 
     # Sanitize path - prevent path traversal
     safe_name = os.path.basename(filename)
