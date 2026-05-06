@@ -3,8 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>vitqa — AI音乐去AI处理平台</title>
-    <meta name="description" content="vitqa - AI音乐去AI味处理平台，HPSS智能分离，永久会员20USDT">
+    <title>vitqa — AI音乐去AI处理平台 | 绕过AI检测，保留人声品质</title>
+    
+    <!-- SEO -->
+    <meta name="description" content="vitqa 是AI音乐去检测处理平台，基于HPSS谐波分离技术。让你的Suno/Udio AI生成音乐通过AI检测，永久会员仅20 USDT。">
+    <meta name="keywords" content="AI音乐去检测, Suno去AI, 音乐去AI味, AI音乐人类化, bypass AI music detection, humanize AI music, HPSS音频处理">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitqa.com/">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="vitqa — AI音乐去AI处理平台">
+    <meta property="og:description" content="基于HPSS谐波分离技术，让你的AI音乐通过检测。三档处理模式，100%保留人声品质。">
+    <meta property="og:url" content="https://vitqa.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="vitqa">
+    <meta property="og:locale" content="zh_CN">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="vitqa — AI音乐去AI处理平台">
+    <meta name="twitter:description" content="HPSS谐波分离，让AI音乐人耳听不出、机器检不出。20 USDT永久会员。">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "vitqa",
+        "description": "AI音乐去AI处理平台，基于HPSS谐波分离技术，绕过AI音乐检测。",
+        "url": "https://vitqa.com/",
+        "applicationCategory": "Multimedia",
+        "operatingSystem": "Web",
+        "offers": {
+            "@type": "Offer",
+            "price": "20",
+            "priceCurrency": "USDT",
+            "description": "永久会员"
+        }
+    }
+    </script>
+    
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -275,6 +313,25 @@
 
     <!-- About -->
     <section class="about" id="about">
+        <h2 class="section-title">分享 vitqa</h2>
+        <div class="about-content">
+            <p>如果你觉得 vitqa 好用，分享给更多需要的人：</p>
+            <div class="share-buttons">
+                <button class="share-btn" onclick="shareTo('twitter')" title="分享到 Twitter/X">
+                    <span>𝕏 Twitter</span>
+                </button>
+                <button class="share-btn" onclick="shareTo('reddit')" title="分享到 Reddit">
+                    <span>🔴 Reddit</span>
+                </button>
+                <button class="share-btn" onclick="shareTo('telegram')" title="分享到 Telegram">
+                    <span>✈ Telegram</span>
+                </button>
+                <button class="share-btn" onclick="shareTo('copy')" title="复制链接">
+                    <span>📋 复制链接</span>
+                </button>
+            </div>
+        </div>
+
         <h2 class="section-title">关于 vitqa</h2>
         <div class="about-content glass">
             <p>
@@ -381,5 +438,26 @@
     <div class="toast" id="toast"></div>
 
     <script src="/static/js/app.js"></script>
+    
+    <script>
+    // Share functions
+    function shareTo(platform) {
+        const url = encodeURIComponent('https://vitqa.com');
+        const text = encodeURIComponent('让你的AI音乐通过检测！vitqa - 基于HPSS的去AI处理平台 🎵');
+        const links = {
+            twitter: 'https://twitter.com/intent/tweet?text=' + text + '&url=' + url,
+            reddit: 'https://reddit.com/submit?url=' + url + '&title=' + text,
+            telegram: 'https://t.me/share/url?url=' + url + '&text=' + text,
+            copy: ''
+        };
+        if (platform === 'copy') {
+            navigator.clipboard.writeText('https://vitqa.com').then(function() {
+                alert('✅ 链接已复制！');
+            });
+            return;
+        }
+        window.open(links[platform], '_blank', 'width=600,height=400');
+    }
+    </script>
 </body>
 </html>

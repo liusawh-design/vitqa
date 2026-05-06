@@ -445,3 +445,27 @@ section { padding: 100px 24px; max-width: 1200px; margin: 0 auto; }
     .hero-stats { flex-direction: column; gap: 12px; padding: 16px; }
     .stat-divider { display: none; }
 }
+
+/* Share Buttons */
+.share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+    justify-content: center;
+}
+.share-btn {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: #e0e0e0;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.share-btn:hover {
+    background: rgba(108,92,231,0.2);
+    border-color: #6c5ce7;
+    transform: translateY(-2px);
+}
