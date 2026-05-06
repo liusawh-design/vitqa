@@ -364,8 +364,8 @@ def user_status(token: str = Query(...)):
         if not row:
             raise HTTPException(404, "User not found")
         return {
-            "wallet_address": row["wallet_address"],
-            "is_member": bool(row["is_member"]),
+            "wallet_address": row["wallet_address"] or "",
+            "is_member": bool(row["is_member"] or 0),
             "member_until": row["member_until"] or "",
             "total_conversions": row["total_conversions"]
         }
@@ -755,8 +755,8 @@ def admin_dashboard(request: Request):
             for p in recent_payments
         ],
         "recent_users": [
-            {"id": u["id"], "wallet": u["wallet_address"][:12] + "...",
-             "is_member": bool(u["is_member"]), "conversions": u["total_conversions"],
+            {"id": u["id"], "wallet": (u["wallet_address"] or "legacy")[:12] + "...",
+             "is_member": bool(u["is_member"]), "conversions": u["total_conversions"] or 0,
              "created_at": u["created_at"]}
             for u in recent_users
         ]
