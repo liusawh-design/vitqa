@@ -822,7 +822,17 @@ def admin_page():
     return HTMLResponse(html)
 
 
-# ─── Frontend ─────────────────────────────────────────────────# ─── Frontend ─────────────────────────────────────────────────
+# ─── Frontend ─────────────────────────────────────────────────# ─── Demo / Landing Pages ────────────────────────────────────
+
+@app.get("/demo")
+def demo_page():
+    demo_path = FRONTEND_DIR / "demo.html"
+    if demo_path.exists():
+        return HTMLResponse(demo_path.read_text(encoding="utf-8"))
+    return HTMLResponse("<h1>vitqa Demo</h1><p>Page not found</p>")
+
+
+# ─── Frontend ─────────────────────────────────────────────────
 
 @app.get("/{full_path:path}")
 def serve_frontend(full_path: str):

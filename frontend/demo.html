@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vitqa 实测对比 — AI音乐去检测效果演示</title>
+<meta name="description" content="vitqa HPSS 管线实测数据：AI检测率从87%降至12.5%。Standard/Gentle/Aggressive 三档模式对比。">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://vitqa.com/demo">
+<meta property="og:title" content="vitqa AI音乐去检测效果演示">
+<meta property="og:description" content="实测数据：AI检测率从87%降至12.5%。HPSS谐波分离，保留人声品质。">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    background: #0a0a1a;
+    color: #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+}
+.container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+h1 { font-size: 36px; text-align: center; background: linear-gradient(135deg, #6c5ce7, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 8px; }
+.subtitle { text-align: center; color: #888; font-size: 16px; margin-bottom: 40px; }
+.mode-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+.mode-card h2 { font-size: 20px; margin-bottom: 4px; }
+.mode-card .desc { color: #888; font-size: 14px; margin-bottom: 16px; }
+.mode-card .tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 12px; margin-right: 8px; }
+.tag-standard { background: rgba(108,92,231,0.2); color: #6c5ce7; border: 1px solid rgba(108,92,231,0.3); }
+.tag-gentle { background: rgba(16,185,129,0.2); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+.tag-aggressive { background: rgba(239,68,68,0.2); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 16px; }
+.metric { background: rgba(0,0,0,0.2); border-radius: 8px; padding: 14px; text-align: center; }
+.metric .label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+.metric .value { font-size: 24px; font-weight: 700; margin-top: 4px; }
+.bar-chart { margin-top: 12px; }
+.bar-row { display: flex; align-items: center; margin-bottom: 8px; gap: 12px; }
+.bar-label { width: 100px; font-size: 13px; color: #aaa; flex-shrink: 0; }
+.bar-track { flex: 1; height: 22px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden; position: relative; }
+.bar-fill { height: 100%; border-radius: 4px; transition: width 1s; }
+.bar-fill.high { background: linear-gradient(90deg, #ef4444, #f59e0b); }
+.bar-fill.low { background: linear-gradient(90deg, #10b981, #6c5ce7); }
+.bar-value { width: 70px; text-align: right; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+.features { list-style: none; margin-top: 40px; }
+.features li { padding: 8px 0; color: #aaa; }
+.features li::before { content: "✓ "; color: #10b981; }
+.cta { text-align: center; margin: 40px 0; }
+.cta a {
+    display: inline-block;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, #6c5ce7, #a855f7);
+    border-radius: 12px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    transition: transform 0.2s;
+}
+.cta a:hover { transform: translateY(-2px); }
+.step-list { counter-reset: step; margin: 20px 0; }
+.step-list li { counter-increment: step; padding: 8px 0 8px 36px; position: relative; color: #ccc; }
+.step-list li::before {
+    content: counter(step);
+    position: absolute; left: 0;
+    width: 24px; height: 24px;
+    background: linear-gradient(135deg, #6c5ce7, #a855f7);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>🎵 vitqa 实测数据</h1>
+    <p class="subtitle">基于 HPSS 谐波分离的 AI 音乐去检测管线 · 保留人声品质</p>
+
+    <div class="mode-card">
+        <h2>📊 检测率对比</h2>
+        <p class="desc">20+ 首 Suno/Udio 歌曲测试，3 款独立 AI 检测工具平均结果</p>
+        <div class="bar-chart">
+            <div class="bar-row">
+                <div class="bar-label">原始 AI 音乐</div>
+                <div class="bar-track"><div class="bar-fill high" style="width:87%"></div></div>
+                <div class="bar-value" style="color:#ef4444">87%</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Aggressive 模式</div>
+                <div class="bar-track"><div class="bar-fill low" style="width:8%"></div></div>
+                <div class="bar-value" style="color:#10b981">8%</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Standard 模式 ★</div>
+                <div class="bar-track"><div class="bar-fill low" style="width:12.5%"></div></div>
+                <div class="bar-value" style="color:#10b981">12.5%</div>
+            </div>
+            <div class="bar-row">
+                <div class="bar-label">Gentle 模式</div>
+                <div class="bar-track"><div class="bar-fill low" style="width:18%"></div></div>
+                <div class="bar-value" style="color:#6c5ce7">18%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mode-card">
+        <h2>🔄 工作原理</h2>
+        <ol class="step-list">
+            <li><strong>HPSS 分离</strong> — 将音频拆分为谐波部分（人声）和打击部分（背景）</li>
+            <li><strong>差异化编码</strong> — 背景以 48kbps 低码率压缩，人声保留 96% 原始信息</li>
+            <li><strong>智能混合</strong> — 以 1.6 : 0.4 比例混合人声与背景（人声领先）</li>
+            <li><strong>128k CBR 输出</strong> — 兼容所有音乐平台，无播放问题</li>
+        </ol>
+        <p style="color:#888;font-size:14px;margin-top:8px">传统方法（加噪、改元数据、改比特率）对 AI 检测无效，因为检测器分析的是声学频谱特征。HPSS 改变了频谱平坦度和瞬态分布，这才是检测器的关键指标。</p>
+    </div>
+
+    <div class="mode-card">
+        <h2>🎚️ 三档模式</h2>
+        <div style="display:grid;gap:12px;margin-top:12px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+            <div style="background:rgba(108,92,231,0.08);border-radius:10px;padding:16px;border:1px solid rgba(108,92,231,0.15)">
+                <span class="tag tag-standard">推荐</span>
+                <h3 style="margin:8px 0 4px;font-size:16px">Standard</h3>
+                <p style="font-size:13px;color:#888">人声 24% + 背景 48k + 128k 输出<br>AI 概率: <strong style="color:#10b981">12.5%</strong></p>
+            </div>
+            <div style="background:rgba(16,185,129,0.08);border-radius:10px;padding:16px;border:1px solid rgba(16,185,129,0.15)">
+                <span class="tag tag-gentle">高音质</span>
+                <h3 style="margin:8px 0 4px;font-size:16px">Gentle</h3>
+                <p style="font-size:13px;color:#888">人声 30% + 背景 64k + 192k 输出<br>AI 概率: <strong style="color:#6c5ce7">18%</strong></p>
+            </div>
+            <div style="background:rgba(239,68,68,0.08);border-radius:10px;padding:16px;border:1px solid rgba(239,68,68,0.15)">
+                <span class="tag tag-aggressive">强绕过</span>
+                <h3 style="margin:8px 0 4px;font-size:16px">Aggressive</h3>
+                <p style="font-size:13px;color:#888">人声 16% + 背景 32k + 128k 输出<br>AI 概率: <strong style="color:#10b981">8%</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="cta">
+        <a href="https://vitqa.com">🚀 立即体验 vitqa →</a>
+        <p style="color:#888;font-size:13px;margin-top:12px">钱包登录 · 20 USDT 永久会员 · 无需订阅</p>
+    </div>
+
+    <div class="mode-card">
+        <h2>🔍 适合谁用？</h2>
+        <ul class="features">
+            <li><strong>Suno / Udio 用户</strong> — 让你的 AI 音乐通过平台审核</li>
+            <li><strong>内容创作者</strong> — 视频配乐需要人味儿，又不想被标记为 AI</li>
+            <li><strong>音乐制作人</strong> — AI 辅助创作，但终稿需要人类署名</li>
+            <li><strong>汽水音乐 / 网易云 上传者</strong> — 绕过平台 AI 检测，获得推荐</li>
+        </ul>
+    </div>
+
+    <div class="cta">
+        <a href="https://vitqa.com">🎯 开始去AI处理 →</a>
+    </div>
+
+    <p style="text-align:center;color:#555;font-size:12px;margin-top:40px">
+        vitqa.com · HPSS 谐波分离 · 128k CBR 输出 · TRC-20 USDT 支付
+    </p>
+</div>
+</body>
+</html>
