@@ -548,7 +548,7 @@ async def check_free_trial(request: Request):
     return {"remaining": remaining, "total": FREE_TRIAL_LIMIT}
 
 @app.post("/api/upload")
-async def upload_audio(request: Request, token: str = Query(...), file: UploadFile = File(...)):
+async def upload_audio(request: Request, token: str = Query(None), file: UploadFile = File(...)):
     """Upload audio file for processing (members only, free trial 2x)."""
     check_rate_limit(request)
     user = None
@@ -622,7 +622,7 @@ async def upload_audio(request: Request, token: str = Query(...), file: UploadFi
 @app.post("/api/convert")
 async def convert_audio(
     request: Request,
-    token: str = Query(...),
+    token: str = Query(None),
     upload_id: str = Form(...),
     mode: str = Form("standard")
 ):
