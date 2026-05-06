@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vitqa — AI音乐去AI处理平台</title>
+    <meta name="description" content="vitqa - AI音乐去AI味处理平台，HPSS智能分离，永久会员20USDT">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Ambient Background -->
+    <div class="ambient-bg">
+        <div class="orb or1"></div>
+        <div class="orb or2"></div>
+        <div class="orb or3"></div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar glass" id="navbar">
+        <div class="nav-inner">
+            <a href="/" class="logo">
+                <span class="logo-icon">♫</span>
+                <span class="logo-text">vitqa</span>
+            </a>
+            <div class="nav-links">
+                <a href="#features" class="nav-link">功能</a>
+                <a href="#pricing" class="nav-link">定价</a>
+                <a href="#about" class="nav-link">关于</a>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-ghost btn-connect-wallet" id="connectWalletBtn" onclick="connectMetaMask()">
+                    <span class="wallet-dot"></span> 连接钱包登录
+                </button>
+                <div id="userMenu" class="user-menu hidden">
+                    <div class="user-badge" id="memberBadge">★ 永久会员</div>
+                    <span class="wallet-short" id="userWallet"></span>
+                    <button class="btn btn-sm" onclick="logout()">退出</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">⚡ HPSS v2 优化引擎</div>
+            <h1 class="hero-title">
+                <span class="gradient-text">让AI音乐</span><br>
+                听起来像人做的
+            </h1>
+            <p class="hero-desc">
+                vitqa 基于 HPSS 智能分离技术，对 AI 生成音乐的背景层进行编码处理，<br>
+                保留人声原始质感，优雅绕过音频平台的 AI 检测。
+            </p>
+            <div class="hero-actions">
+                <button class="btn btn-primary btn-lg" onclick="scrollToConverter()">
+                    🚀 开始处理
+                </button>
+                <button class="btn btn-ghost btn-lg" onclick="connectMetaMask()">
+                    钱包登录
+                </button>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="waveform-visual">
+                <div class="wave-bar" style="--h:30%"></div>
+                <div class="wave-bar" style="--h:60%"></div>
+                <div class="wave-bar" style="--h:90%"></div>
+                <div class="wave-bar" style="--h:70%"></div>
+                <div class="wave-bar" style="--h:100%"></div>
+                <div class="wave-bar" style="--h:85%"></div>
+                <div class="wave-bar" style="--h:55%"></div>
+                <div class="wave-bar" style="--h:25%"></div>
+                <div class="wave-bar" style="--h:50%"></div>
+                <div class="wave-bar" style="--h:80%"></div>
+                <div class="wave-bar" style="--h:45%"></div>
+                <div class="wave-bar" style="--h:75%"></div>
+                <div class="wave-bar" style="--h:95%"></div>
+                <div class="wave-bar" style="--h:60%"></div>
+                <div class="wave-bar" style="--h:35%"></div>
+                <div class="wave-bar" style="--h:70%"></div>
+                <div class="wave-bar" style="--h:88%"></div>
+                <div class="wave-bar" style="--h:50%"></div>
+                <div class="wave-bar" style="--h:40%"></div>
+                <div class="wave-bar" style="--h:65%"></div>
+            </div>
+            <div class="hero-stats glass">
+                <div class="stat">
+                    <span class="stat-num">12.5%</span>
+                    <span class="stat-label">平均AI概率</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-num">128k</span>
+                    <span class="stat-label">CBR无损输出</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-num">2.4s</span>
+                    <span class="stat-label">平均处理时间</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <h2 class="section-title">为什么选择 vitqa</h2>
+        <p class="section-sub">基于真实对抗检测数据优化的三档处理方案</p>
+        <div class="feature-grid">
+            <div class="feature-card glass">
+                <div class="feature-icon">🎯</div>
+                <h3>HPSS 智能分离</h3>
+                <p>谐波-打击乐分离算法，精准提取人声与背景音轨，仅对背景层编码处理。</p>
+            </div>
+            <div class="feature-card glass">
+                <div class="feature-icon">🔊</div>
+                <h3>人声无损保留</h3>
+                <p>原始人声占比 24%，混音比 1.6:0.4，在逃避检测的同时保持听觉完整性。</p>
+            </div>
+            <div class="feature-card glass">
+                <div class="feature-icon">📊</div>
+                <h3>真实数据验证</h3>
+                <p>经多轮汽水音乐平台检测验证，12.5% 平均 AI 概率，远低于 50% 判定线。</p>
+            </div>
+            <div class="feature-card glass">
+                <div class="feature-icon">⚡</div>
+                <h3>三档处理模式</h3>
+                <p>Standard / Gentle / Aggressive 三档可选，适应不同平台与音乐风格。</p>
+            </div>
+            <div class="feature-card glass">
+                <div class="feature-icon">🔒</div>
+                <h3>128k 硬性标准</h3>
+                <p>输出码率不低于 128kbps CBR，满足所有主流音频平台的最低质量红线。</p>
+            </div>
+            <div class="feature-card glass">
+                <div class="feature-icon">🚀</div>
+                <h3>秒级处理速度</h3>
+                <p>基于 FFmpeg 的高效处理管道，平均处理一首 4 分钟歌曲仅需 2.4 秒。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Converter Section (Members Only) -->
+    <section class="converter" id="converter">
+        <div class="converter-inner">
+            <h2 class="section-title">音乐去AI处理</h2>
+            <p class="section-sub">拖拽上传或点击选择音频文件</p>
+
+            <div id="converterGuest" class="converter-guest glass">
+                <div class="guest-icon">🔒</div>
+                <h3>仅限会员使用</h3>
+                <p>永久会员仅需 20 USDT，支持 TRC-20 加密钱包支付</p>
+                <button class="btn btn-primary" onclick="connectMetaMask()">
+                    连接钱包登录
+                </button>
+                <button class="btn btn-ghost" onclick="showPayment()">
+                    购买会员
+                </button>
+            </div>
+
+            <div id="converterPanel" class="converter-panel hidden">
+                <!-- Upload Zone -->
+                <div class="upload-zone glass" id="uploadZone">
+                    <div class="upload-icon">🎵</div>
+                    <p class="upload-text">拖拽音频文件到此处</p>
+                    <p class="upload-hint">支持 WAV / MP3 / FLAC / M4A / OGG / AAC，最大 100MB</p>
+                    <input type="file" id="fileInput" accept=".wav,.mp3,.flac,.m4a,.ogg,.aac" hidden>
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                        选择文件
+                    </button>
+                    <div id="fileInfo" class="file-info hidden">
+                        <span id="fileName"></span>
+                        <span id="fileSize" class="file-size"></span>
+                    </div>
+                </div>
+
+                <!-- Mode Selection -->
+                <div class="mode-select">
+                    <h3>选择处理模式</h3>
+                    <div class="mode-grid">
+                        <label class="mode-card glass selected" data-mode="standard">
+                            <input type="radio" name="mode" value="standard" checked hidden>
+                            <span class="mode-name">Standard</span>
+                            <span class="mode-badge">推荐</span>
+                            <span class="mode-desc">人声24% · 背景48k · 混音1.6:0.4</span>
+                            <span class="mode-result">平均AI概率 12.5%</span>
+                        </label>
+                        <label class="mode-card glass" data-mode="gentle">
+                            <input type="radio" name="mode" value="gentle" hidden>
+                            <span class="mode-name">Gentle</span>
+                            <span class="mode-badge">高品质</span>
+                            <span class="mode-desc">人声30% · 背景64k · 混音2.0:0.5</span>
+                            <span class="mode-result">更高音质 · 检测概率略高</span>
+                        </label>
+                        <label class="mode-card glass" data-mode="aggressive">
+                            <input type="radio" name="mode" value="aggressive" hidden>
+                            <span class="mode-name">Aggressive</span>
+                            <span class="mode-badge">强绕过</span>
+                            <span class="mode-desc">人声16% · 背景32k · 混音1.0:0.3</span>
+                            <span class="mode-result">最强绕过 · 音质略损</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Convert Button -->
+                <button class="btn btn-primary btn-lg btn-convert" id="convertBtn" onclick="convertAudio()">
+                    ✨ 开始转换
+                </button>
+
+                <!-- Progress -->
+                <div id="progressArea" class="progress-area hidden">
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <p class="progress-text" id="progressText">处理中...</p>
+                </div>
+
+                <!-- Result -->
+                <div id="resultArea" class="result-area glass hidden">
+                    <div class="result-icon">✅</div>
+                    <h3>处理完成！</h3>
+                    <div class="result-stats">
+                        <div class="result-stat">
+                            <span>处理耗时</span>
+                            <strong id="resultDuration">-</strong>
+                        </div>
+                        <div class="result-stat">
+                            <span>文件大小</span>
+                            <strong id="resultSize">-</strong>
+                        </div>
+                        <div class="result-stat">
+                            <span>输出格式</span>
+                            <strong id="resultFormat">MP3 128kbps CBR</strong>
+                        </div>
+                    </div>
+                    <a id="downloadLink" class="btn btn-primary btn-lg" download>
+                        ⬇️ 下载处理后的文件
+                    </a>
+                    <button class="btn btn-ghost" onclick="resetConverter()">
+                        处理下一首
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <h2 class="section-title">简单透明的定价</h2>
+        <p class="section-sub">永久会员，一次付费，永久使用</p>
+        <div class="pricing-card glass featured">
+            <div class="pricing-badge">🔥 最受欢迎</div>
+            <div class="pricing-plan">Permanent</div>
+            <div class="pricing-price">
+                <span class="price-amount">20</span>
+                <span class="price-currency">USDT</span>
+            </div>
+            <div class="pricing-period">一次性付费 · 永久有效</div>
+            <ul class="pricing-features">
+                <li>✓ HPSS 智能音频处理</li>
+                <li>✓ 三档模式自由切换</li>
+                <li>✓ 无限转换次数</li>
+                <li>✓ 128k CBR 高品质输出</li>
+                <li>✓ 永久有效，无需续费</li>
+                <li>✓ 支持 TRC-20 钱包支付</li>
+            </ul>
+            <button class="btn btn-primary btn-lg btn-block" onclick="handlePricingClick()" id="pricingCta">
+                💎 立即购买
+            </button>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="about" id="about">
+        <h2 class="section-title">关于 vitqa</h2>
+        <div class="about-content glass">
+            <p>
+                vitqa 是一套基于 HPSS 谐波-打击乐分离技术的 AI 音乐去检测引擎。 
+                与传统"降码率"逃避方案不同，vitqa 精确分离音乐的
+                <strong>人声层（谐波）</strong>与<strong>背景层（打击乐/乐器）</strong>，
+                仅对背景层进行编码混淆处理，保留人声的原始质感和动态范围。
+            </p>
+            <p>
+                经过 20+ 轮汽水音乐平台检测环境的验证测试，Optimized v2 方案在
+                保持 128kbps CBR 输出质量的前提下，将平均 AI 检测概率稳定控制在
+                <strong>12.5%</strong>，远低于平台判定阈值（50%）。覆盖曲风包括
+                流行、摇滚、叙事古风、电子等多种风格，具有横向可迁移性。
+            </p>
+            <div class="about-tech">
+                <span class="tech-tag">HPSS 分离</span>
+                <span class="tech-tag">FFmpeg 编码</span>
+                <span class="tech-tag">Libmp3lame</span>
+                <span class="tech-tag">128k CBR</span>
+                <span class="tech-tag">48k 背景</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <span class="footer-logo">♫ vitqa</span>
+                <p class="footer-desc">AI音乐去检测处理平台</p>
+            </div>
+            <div class="footer-links">
+                <a href="#" onclick="connectMetaMask()">会员登录</a>
+                <a href="#pricing">购买会员</a>
+                <a href="#features">功能介绍</a>
+            </div>
+            <div class="footer-copy">© 2026 vitqa. All rights reserved.</div>
+        </div>
+    </footer>
+
+
+
+    <!-- Wallet Modal (Login + Payment) -->
+    <div class="modal-overlay" id="walletModal">
+        <div class="modal-content glass">
+            <button class="modal-close" onclick="closeModal('walletModal')">✕</button>
+            <div class="modal-header">
+                <h2>连接钱包</h2>
+                <p>连接钱包以登录 vitqa</p>
+            </div>
+            <div class="wallet-options">
+                <div class="wallet-option glass" onclick="connectMetaMask()">
+                    <div class="wallet-icon">
+                        <svg viewBox="0 0 40 40"><path d="M36 6l-14 10.4L23.6 9z" fill="#E2761B"/><path d="M4 6l13.9 10.5L16.4 9z" fill="#E4761B"/><path d="M30.2 28.3l-3.8 5.8 8.1 2.2 2.3-7.9z" fill="#D7C1B3"/><path d="M3.2 28.4l2.3 7.9 8.1-2.2-3.8-5.8z" fill="#D7C1B3"/><path d="M12.6 18.2l-2.3 3.4 8.1.4-.3-8.7z" fill="#233447"/><path d="M27.4 18.2l-5.8-4.9-.2 8.7 8.1-.4z" fill="#233447"/><path d="M13.6 34.1l4.9-2.3-4.2-3.3z" fill="#CD6116"/><path d="M21.5 31.8l4.9 2.3-.7-5.6z" fill="#CD6116"/><path d="M31.7 28.4l-8.1-2.2.7 5.6 1.4-1.1z" fill="#E4751F"/><path d="M12.6 18.2l-2.3 3.4 8.1.4-.3-8.7z" fill="#233447"/><path d="M27.4 18.2l-5.8-4.9-.2 8.7 8.1-.4z" fill="#233447"/></svg>
+                    </div>
+                    <span>MetaMask</span>
+                </div>
+                <div class="wallet-option glass" onclick="connectWalletConnect()">
+                    <div class="wallet-icon">📱</div>
+                    <span>WalletConnect</span>
+                </div>
+            </div>
+            <div class="wallet-connect-note" style="text-align:center;color:var(--text-muted);font-size:0.8rem;margin-bottom:16px">
+                连接后需签名消息完成身份验证
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal-content glass">
+            <button class="modal-close" onclick="closeModal('paymentModal')">✕</button>
+            <div class="modal-header">
+                <h2>购买永久会员</h2>
+                <p>发送 20 USDT (TRC-20) 到以下地址</p>
+            </div>
+            <div class="payment-address glass" id="paymentAddress">
+                <div class="address-label">收款地址</div>
+                <div class="address-value" id="walletAddress">-</div>
+                <button class="btn btn-sm" onclick="copyAddress()">📋 复制地址</button>
+            </div>
+            <div class="payment-network">
+                <span class="network-badge">TRC-20</span>
+                <span class="network-badge">USDT</span>
+            </div>
+            <div class="payment-steps">
+                <div class="step">1. 打开 MetaMask 或支持 TRC-20 的钱包</div>
+                <div class="step">2. 添加 USDT 代币 (TRC-20 网络)</div>
+                <div class="step">3. 发送 <strong>20 USDT</strong> 到上方地址</div>
+                <div class="step">4. 输入交易哈希完成验证</div>
+            </div>
+            <div class="payment-verify">
+                <p>已发送？在此验证：</p>
+                <div class="input-group">
+                    <input type="text" id="txHashInput" placeholder="交易哈希 (Tx Hash)" class="form-input">
+                    <button class="btn btn-primary" onclick="verifyPayment()">验证</button>
+                </div>
+                <div id="paymentStatus" class="payment-status hidden"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
