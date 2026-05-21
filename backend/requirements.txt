@@ -2,6 +2,14 @@ fastapi==0.115.6
 uvicorn[standard]==0.34.0
 python-multipart==0.0.19
 PyJWT==2.10.1
-requests==2.32.3
+
 python-dotenv==1.0.1
 eth-account==0.13.5
+
+requests
+
+# v4 HPSS pipeline
+librosa>=0.10.0
+numpy>=1.24.0
+scipy>=1.10.0
+soundfile>=0.12.0
