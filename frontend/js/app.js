@@ -104,7 +104,7 @@ function checkUrlHash() {
     const hash = window.location.hash;
     if (hash.startsWith('#mode=')) {
         const modeKey = decodeURIComponent(hash.substring(6));
-        const card = document.querySelector('.mc-card[data-mode="' + modeKey + '"]');
+        const card = document.querySelector('.mc-gallery-card[data-mode="' + modeKey + '"]');
         if (card) {
             selectModeCard(card);
             // Expand the parent family
@@ -126,7 +126,7 @@ function checkUrlHash() {
     }
 }
 
-// ─── Build Mode Cards (card-style layout, 48 modes in 4 families) ────
+// ─── Build Mode Cards (5-col gallery, 48 modes in 4 families) ────
 function buildModeCards() {
     const container = document.getElementById('modeGridContainer');
     if (!container) return;
@@ -145,13 +145,15 @@ function buildModeCards() {
         // Family section
         html += '<div class="mc-family-section ' + colorClass + '">';
         html += '<div class="mc-family-header ' + colorClass + '" data-family="' + f + '" onclick="toggleFamily(this)" style="--mc-accent:' + familyColor + '">';
+        html += '<div class="mc-family-header-left">';
         html += '<div class="mc-family-icon">' + familyIcon + '</div>';
         html += '<div class="mc-family-info">';
         html += '<span class="mc-family-name">' + familyName + '</span>';
         html += '<span class="mc-family-desc">' + familyDesc + '</span>';
         html += '</div>';
+        html += '</div>';
         html += '<div class="mc-family-actions">';
-        html += '<span class="mc-family-count">12种模式</span>';
+        html += '<span class="mc-family-count">12</span>';
         html += '<span class="mc-family-toggle ' + (isFirst ? '' : 'collapsed') + '">▼</span>';
         html += '</div>';
         html += '</div>';
@@ -159,18 +161,12 @@ function buildModeCards() {
         // Family body (collapsible)
         html += '<div class="mc-family-body' + (isFirst ? '' : ' collapsed') + '" style="' + (isFirst ? '' : 'max-height:0;overflow:hidden;') + '">';
 
-        // 4 sub-rows, each with 3 strength cards
+        // Flat 5-col grid of all 12 modes in this family
+        html += '<div class="mc-gallery-grid">';
         for (let s = 0; s < 4; s++) {
             const subIdx = f * 4 + s;
             const subName = getSubName(subIdx);
 
-            // Sub-type header
-            html += '<div class="mc-sub-header ' + colorClass + '">';
-            html += '<span class="mc-sub-label">' + subName + '</span>';
-            html += '</div>';
-
-            // 3 cards row
-            html += '<div class="mc-card-row">';
             for (let st = 0; st < 3; st++) {
                 const mode = MODES[f * 12 + s * 3 + st];
                 const idx = mode.idx;
@@ -179,46 +175,51 @@ function buildModeCards() {
                 const isNova = mode.key.startsWith('hybrid_nova');
                 const isDefault = mode.key === 'hybrid_nova_medium';
                 const barCount = STRENGTH_BARS[st];
+                const strengthName = getStrengthName(st);
 
-                // Detail data
                 const qualityVal = getModeDetail(idx, 'quality');
                 const detectionVal = getModeDetail(idx, 'detection');
                 const qShow = typeof qualityVal === 'number' ? qualityVal : 3;
                 const dShow = typeof detectionVal === 'number' ? detectionVal : 3;
 
-                html += '<div class="mc-card ' + colorClass + (isNova ? ' mc-card-nova' : '') + '" data-mode="' + mode.key + '" data-family="' + f + '" data-sub="' + s + '" data-strength="' + st + '" data-idx="' + idx + '" onclick="onModeCardClick(this)" style="--mc-accent:' + familyColor + '">';
+                // Strength label
+                const strengthIcon = ['☁️', '🌤', '🔥'][st];
+
+                html += '<div class="mc-gallery-card ' + colorClass + (isNova ? ' mc-gallery-nova' : '') + '" data-mode="' + mode.key + '" data-family="' + f + '" data-sub="' + s + '" data-strength="' + st + '" data-idx="' + idx + '" onclick="onModeCardClick(this)" style="--mc-accent:' + familyColor + '">';
                 html += '<input type="radio" name="mode" value="' + mode.key + '" ' + (isDefault ? 'checked' : '') + ' hidden>';
 
-                // Badge
-                html += '<span class="mc-card-badge ' + colorClass + '-badge">' + badge + '</span>';
+                // Top row: badge + bitrate
+                html += '<div class="mc-g-top">';
+                html += '<span class="mc-g-badge ' + colorClass + '-badge">' + badge + '</span>';
+                html += '<span class="mc-g-bitrate">256k</span>';
+                html += '</div>';
 
-                // Mode name
-                html += '<span class="mc-card-name">' + name + '</span>';
+                // Center: mode icon + name
+                html += '<div class="mc-g-center">';
+                html += '<div class="mc-g-icon">' + strengthIcon + '</div>';
+                html += '<span class="mc-g-name">' + name + '</span>';
+                html += '</div>';
 
-                // Sub-label
-                const strengthName = getStrengthName(st);
-                html += '<span class="mc-card-meta">' + subName + ' · ' + strengthName + '</span>';
-
-                // Strength + bitrate row
-                html += '<div class="mc-card-footer">';
-                html += '<span class="mc-card-bars">';
+                // Bottom: sub-type + strength
+                html += '<div class="mc-g-bottom">';
+                html += '<span class="mc-g-meta">' + subName + '</span>';
+                html += '<div class="mc-g-bars">';
                 for (let b = 0; b < 3; b++) {
-                    html += '<span class="mc-bar ' + (b < barCount ? 'mc-bar-filled' : 'mc-bar-empty') + '"></span>';
+                    html += '<span class="mc-g-bar ' + (b < barCount ? 'mc-g-bar-fill' : 'mc-g-bar-empty') + '"></span>';
                 }
-                html += '</span>';
-                html += '<span class="mc-card-bitrate">256k</span>';
+                html += '</div>';
                 html += '</div>';
 
-                // Quality/detection micro bars
-                html += '<div class="mc-card-microui">';
-                html += '<div class="mc-micro-row"><span class="mc-micro-label">Q</span><div class="mc-micro-track"><div class="mc-micro-fill" style="width:' + (qShow / 5 * 100) + '%;background:' + familyColor + '"></div></div></div>';
-                html += '<div class="mc-micro-row"><span class="mc-micro-label">D</span><div class="mc-micro-track"><div class="mc-micro-fill" style="width:' + (dShow / 5 * 100) + '%;background:' + familyColor + '"></div></div></div>';
+                // Hover detail: Q/D bars
+                html += '<div class="mc-g-hover-info">';
+                html += '<div class="mc-g-hover-row"><span class="mc-g-hover-label">Q</span><div class="mc-g-hover-track"><div class="mc-g-hover-fill" style="width:' + (qShow / 5 * 100) + '%;background:' + familyColor + '"></div></div></div>';
+                html += '<div class="mc-g-hover-row"><span class="mc-g-hover-label">D</span><div class="mc-g-hover-track"><div class="mc-g-hover-fill" style="width:' + (dShow / 5 * 100) + '%;background:' + familyColor + '"></div></div></div>';
                 html += '</div>';
 
-                html += '</div>'; // mc-card
+                html += '</div>'; // mc-gallery-card
             }
-            html += '</div>'; // mc-card-row
         }
+        html += '</div>'; // mc-gallery-grid
 
         html += '</div>'; // mc-family-body
         html += '</div>'; // mc-family-section
@@ -227,13 +228,13 @@ function buildModeCards() {
     container.innerHTML = html;
 
     // Default select Nova中度
-    const defaultCard = container.querySelector('.mc-card[data-mode="hybrid_nova_medium"]');
+    const defaultCard = container.querySelector('.mc-gallery-card[data-mode="hybrid_nova_medium"]');
     if (defaultCard) {
         defaultCard.classList.add('selected');
         defaultCard.querySelector('input').checked = true;
         updateSelectedModeDisplay(defaultCard);
     } else {
-        const firstCard = container.querySelector('.mc-card');
+        const firstCard = container.querySelector('.mc-gallery-card');
         if (firstCard) {
             firstCard.classList.add('selected');
             firstCard.querySelector('input').checked = true;
@@ -281,7 +282,7 @@ function onModeCardClick(cardEl) {
 
 function selectModeCard(cardEl) {
     const container = document.getElementById('modeGridContainer');
-    container.querySelectorAll('.mc-card').forEach(function(c) {
+    container.querySelectorAll('.mc-gallery-card').forEach(function(c) {
         c.classList.remove('selected');
     });
     cardEl.classList.add('selected');
@@ -298,7 +299,7 @@ function updateSelectedModeDisplay(card) {
     const strength = parseInt(card.getAttribute('data-strength'));
     const idx = parseInt(card.getAttribute('data-idx'));
     const modeKey = card.getAttribute('data-mode');
-    const modeName = card.querySelector('.mc-card-name').textContent;
+    const modeName = card.querySelector('.mc-g-name').textContent;
 
     const familyName = getFamilyName(family);
     const familyIcons = ['🌌', '⏱', '🧠', '⚡'];
@@ -373,7 +374,7 @@ function setupDetailModal() {
         selectBtn.addEventListener('click', function() {
             const modeKey = modal.getAttribute('data-mode-key');
             if (modeKey) {
-                const card = document.querySelector('.mc-card[data-mode="' + modeKey + '"]');
+                const card = document.querySelector('.mc-gallery-card[data-mode="' + modeKey + '"]');
                 if (card) {
                     selectModeCard(card);
                 }
@@ -396,7 +397,7 @@ function openModeDetail(modeKey) {
     if (!modal) return;
 
     // Find mode data
-    const card = document.querySelector('.mc-card[data-mode="' + modeKey + '"]');
+    const card = document.querySelector('.mc-gallery-card[data-mode="' + modeKey + '"]');
     if (!card) return;
 
     const family = parseInt(card.getAttribute('data-family'));
